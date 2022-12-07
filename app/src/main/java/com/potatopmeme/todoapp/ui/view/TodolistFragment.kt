@@ -1,5 +1,6 @@
 package com.potatopmeme.todoapp.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,13 @@ class TodolistFragment : Fragment() {
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_todolist, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnAdd.setOnClickListener{
+            //startActivity(Intent(context as MainActivity,AddActivity::class.java))
+        }
     }
 
     override fun onDestroyView() {

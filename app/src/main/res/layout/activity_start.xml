@@ -26,10 +26,12 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="Never put off till tomorrow\nwhat can be done today."
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -41,8 +43,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="115dp"
-            android:layout_height="119dp"
+            android:layout_width="102dp"
+            android:layout_height="101dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="196dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,10 +65,10 @@
             android:id="@+id/imageView4"
             android:layout_width="32dp"
             android:layout_height="38dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="28dp"
             app:layout_constraintBottom_toTopOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
             app:srcCompat="@drawable/ic_dot_pink_24" />
 
         <ImageView

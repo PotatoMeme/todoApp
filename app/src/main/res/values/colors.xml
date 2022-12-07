@@ -10,6 +10,9 @@
     <color name="base_back">#332C2F</color>
     <color name="base_pink">#FB4F93</color>
     <color name="base_blue">#00E6E4</color>
+
+
+    <color name="base_light_gray">#606060</color>
     <color name="base_gray">#444444</color>
     <color name="base_mint">#1FE9B2</color>
     <color name="base_orange">#FCB050</color>

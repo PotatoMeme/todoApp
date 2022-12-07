@@ -20,7 +20,7 @@
             android:layout_marginBottom="90dp"
             android:clickable="true"
             android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            app:backgroundTint="@color/base_light_gray"
+            app:backgroundTint="@color/base_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

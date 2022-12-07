@@ -3,7 +3,7 @@
     <style name="Theme.TodoApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/base_orange</item>
-        <item name="colorPrimaryVariant">@color/base_light_gray</item>
+        <item name="colorPrimaryVariant">@color/base_gray</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

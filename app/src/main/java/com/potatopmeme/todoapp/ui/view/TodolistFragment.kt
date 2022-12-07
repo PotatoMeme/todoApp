@@ -27,7 +27,7 @@ class TodolistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAdd.setOnClickListener{
-            //startActivity(Intent(context as MainActivity,AddActivity::class.java))
+            startActivity(Intent(activity as MainActivity,AddActivity::class.java))
         }
     }
 

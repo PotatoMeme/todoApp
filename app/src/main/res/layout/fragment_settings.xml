@@ -50,12 +50,13 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"/>
+
                 <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="30dp"
                     android:thumb="@drawable/selector_switch_thumb"
-                    app:track="@drawable/shape_switch_track"
-                    app:switchMinWidth="60dp"/>
+                    app:switchMinWidth="50dp"
+                    app:track="@drawable/shape_switch_track" />
             </LinearLayout>
             <View
                 android:background="@color/base_dark_gray"

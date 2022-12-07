@@ -1,5 +1,6 @@
 package com.potatopmeme.todoapp.ui.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -17,6 +18,7 @@ class StartActivity : AppCompatActivity() {
         _binding =
             DataBindingUtil.setContentView(this, R.layout.activity_start)
         binding.floatingActionButton.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
             finish()
         }
     }

@@ -25,6 +25,20 @@
                 android:textColor="@color/white"
                 android:textSize="25dp"
                 android:textStyle="bold" />
+            <RelativeLayout
+                android:id="@+id/rv_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_todo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical" />
+
+            </RelativeLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_add"
@@ -35,6 +49,7 @@
                 android:src="@drawable/ic_add_24"
                 app:tint="@android:color/white"
                 app:backgroundTint="@color/base_dark_gray" />
+
         </LinearLayout>
 
 

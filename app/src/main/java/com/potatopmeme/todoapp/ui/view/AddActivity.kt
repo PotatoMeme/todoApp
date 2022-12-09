@@ -12,7 +12,10 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
 import com.potatopmeme.todoapp.data.model.Dates
 import com.potatopmeme.todoapp.databinding.ActivityAddBinding
@@ -50,17 +53,17 @@ class AddActivity : AppCompatActivity() {
     }
 
     var list = mutableListOf<Dates>()
-    var a = 0
-    private fun setupDatesLayout(appCompatActivity: AppCompatActivity ) {
+    private fun setupDatesLayout(appCompatActivity: AppCompatActivity) {
         datesSelectAdapter = DatesSelectAdapter()
         binding.rvDates.apply {
             setHasFixedSize(true)
             layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-            datesSelectAdapter.setOnItemClickListener( object : DatesSelectAdapter.OnItemClickListener{
+            datesSelectAdapter.setOnItemClickListener(object :
+                DatesSelectAdapter.OnItemClickListener {
                 override fun onItemClick(tv: TextView, date: Dates, pos: Int) {
-                    val dlg = DateDialog(appCompatActivity)
+                    val dlg = DateDialog(appCompatActivity,date.date)
                     dlg.setOnOKClickedListener { dateStr, date ->
                         list[pos].date = dateStr
                         tv.text = dateStr
@@ -74,8 +77,32 @@ class AddActivity : AppCompatActivity() {
             adapter = datesSelectAdapter
         }
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder,
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                list.removeAt(position)
+                var layoutParams = binding.rvForm.layoutParams
+                layoutParams.height -= 230
+                binding.rvForm.layoutParams = layoutParams
+                datesSelectAdapter.submitList(list)
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(binding.rvDates)
+        }
+
         binding.fbDatesPlus.setOnClickListener {
-            list.add(Dates(""))
+            list.add(Dates(if (list.size > 0) list[list.size-1].date else ""))
             Log.d(TAG, "setupDatesLayout: $list")
             var layoutParams = binding.rvForm.layoutParams
             layoutParams.height += 230
@@ -87,9 +114,15 @@ class AddActivity : AppCompatActivity() {
     var startDate: Int? = null
     var endDate: Int? = null
     private fun setupDurationLayout() {
+        binding.scDuration.setOnCheckedChangeListener { _, b ->
+            when (b) {
+                true -> setDurationFormHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
+                false -> setDurationFormHeight(0)
+            }
+        }
         binding.btnStartDate.setOnClickListener {
             Log.d(TAG, "setupDurationLayout: btnStartDate clicked")
-            val dlg = DateDialog(this)
+            val dlg = DateDialog(this,binding.tvStartDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvStartDate.text = dateStr
                 startDate = date
@@ -98,7 +131,7 @@ class AddActivity : AppCompatActivity() {
         }
         binding.btnEndDate.setOnClickListener {
             Log.d(TAG, "setupDurationLayout: btnEndDate clicked")
-            val dlg = DateDialog(this)
+            val dlg = DateDialog(this,binding.tvEndDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvEndDate.text = dateStr
                 endDate = date
@@ -110,9 +143,10 @@ class AddActivity : AppCompatActivity() {
 
     var date: Int? = null
     private fun setupDateLayout() {
+
         binding.btnDate.setOnClickListener {
             Log.d(TAG, "setupDateLayout: btnDate clicked")
-            val dlg = DateDialog(this)
+            val dlg = DateDialog(this,binding.tvDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvDate.text = dateStr
                 this.date = date
@@ -131,7 +165,7 @@ class AddActivity : AppCompatActivity() {
 
         binding.btnTime.setOnClickListener {
             Log.d(TAG, "setupTimeLayout: btnTime clicked")
-            val dlg = TimeDialog(this)
+            val dlg = TimeDialog(this,binding.tvTime.text.toString())
             dlg.setOnOKClickedListener { time ->
                 binding.tvTime.text = time
             }
@@ -238,7 +272,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val sort_list = listOf("None", "Day of the week", "Duration", "Dates")
+        val sort_list = listOf("None", "Day of the week", "Dates")
         val adapter_spinner =
             ArrayAdapter(this, R.layout.itme_dropdown, sort_list)
         binding.spRepeat.setAdapter(adapter_spinner)
@@ -260,16 +294,10 @@ class AddActivity : AppCompatActivity() {
                     1 -> {
                         setDateLayoutHeight(0)
                         setWeekLayoutHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
-                        setDurationLayoutHeight(0)
-                        setDatesLayoutHeight(0)
-                    }
-                    2 -> {
-                        setDateLayoutHeight(0)
-                        setWeekLayoutHeight(0)
                         setDurationLayoutHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
                         setDatesLayoutHeight(0)
                     }
-                    3 -> {
+                    2 -> {
                         setDateLayoutHeight(0)
                         setWeekLayoutHeight(0)
                         setDurationLayoutHeight(0)
@@ -308,6 +336,13 @@ class AddActivity : AppCompatActivity() {
         layoutParams.height = height
         binding.durationLayout.layoutParams = layoutParams
     }
+
+    private fun setDurationFormHeight(height: Int) {
+        var layoutParams = binding.durationForm.layoutParams
+        layoutParams.height = height
+        binding.durationForm.layoutParams = layoutParams
+    }
+
 
     private fun setDatesLayoutHeight(height: Int) {
         var layoutParams = binding.datesLayout.layoutParams

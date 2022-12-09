@@ -7,7 +7,7 @@ import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.potatopmeme.todoapp.databinding.DialogTimepickerBinding
 
-class TimeDialog(private val context :AppCompatActivity) {
+class TimeDialog(private val context :AppCompatActivity,private val time: String = "")  {
     private lateinit var binding :DialogTimepickerBinding
     private val dlg = Dialog(context)
 
@@ -21,7 +21,11 @@ class TimeDialog(private val context :AppCompatActivity) {
         //dlg.setCancelable(false)
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-
+        if (!time.isNullOrEmpty()){
+            val datas = time.split(" : ")
+            binding.timePicker.hour = datas[0].toInt()
+            binding.timePicker.minute = datas[1].toInt()
+        }
         binding.tvOk.setOnClickListener {
             listener.onOKClicked("${binding.timePicker.hour} : ${binding.timePicker.minute}")
             dlg.dismiss()

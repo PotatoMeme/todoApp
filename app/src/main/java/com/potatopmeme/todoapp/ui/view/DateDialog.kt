@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.potatopmeme.todoapp.databinding.DialogDatepickerBinding
 import com.potatopmeme.todoapp.databinding.DialogTimepickerBinding
 
-class DateDialog(private val context :AppCompatActivity) {
+class DateDialog(private val context :AppCompatActivity,private val date: String = "") {
     private lateinit var binding : DialogDatepickerBinding
     private val dlg = Dialog(context)
 
@@ -22,6 +22,10 @@ class DateDialog(private val context :AppCompatActivity) {
         //dlg.setCancelable(false)
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        if (!date.isNullOrEmpty()){
+            val datas = date.split("/")
+            binding.datePicker.updateDate(datas[0].toInt(),datas[1].toInt()-1,datas[2].toInt())
+        }
 
         binding.tvOk.setOnClickListener {
             listener.onOKClicked(

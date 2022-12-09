@@ -148,12 +148,12 @@
 
                             <TextView
                                 android:id="@+id/tv_time"
-                                android:gravity="center"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:textSize="20dp"
                                 android:background="@color/base_dark_gray"
+                                android:gravity="center"
                                 android:textColor="@color/white"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
                         </androidx.cardview.widget.CardView>
                         <androidx.appcompat.widget.AppCompatButton
@@ -223,7 +223,6 @@
                             android:id="@+id/rv_form"
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
-                            android:descendantFocusability="blocksDescendants"
                             android:layout_marginBottom="10dp">
 
                             <androidx.recyclerview.widget.RecyclerView
@@ -283,12 +282,12 @@
 
                                 <TextView
                                     android:id="@+id/tv_date"
-                                    android:gravity="center"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
+                                    android:gravity="center"
                                     android:textColor="@color/white"
+                                    android:textSize="18sp"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
 
@@ -533,19 +532,35 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="20dp"
+                            android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Duration"
                             android:textColor="@color/white"
                             android:textSize="25dp"
                             android:textStyle="bold" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sc_duration"
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:thumb="@drawable/selector_switch_thumb"
+                            app:switchMinWidth="50dp"
+                            app:track="@drawable/shape_switch_track" />
+                        </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/duration_form"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="vertical">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -573,12 +588,12 @@
 
                                 <TextView
                                     android:id="@+id/tv_start_date"
-                                    android:gravity="center"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
+                                    android:gravity="center"
                                     android:textColor="@color/white"
+                                    android:textSize="18sp"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
 
@@ -623,12 +638,12 @@
 
                                 <TextView
                                     android:id="@+id/tv_end_date"
-                                    android:gravity="center"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
+                                    android:gravity="center"
                                     android:textColor="@color/white"
+                                    android:textSize="18sp"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
 
@@ -644,6 +659,7 @@
                                 android:text="select"
                                 android:textColor="@color/black"
                                 android:textStyle="bold" />
+                        </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 

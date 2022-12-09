@@ -100,9 +100,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@color/base_dark_gray"
-                            android:clickable="false"
-                            android:focusable="false"
-                            android:textColor="@color/white"
+                           android:textColor="@color/white"
                             android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>
 
@@ -135,12 +133,12 @@
                     <LinearLayout
                         android:id="@+id/time_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
+                            android:layout_height="45dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="10dp"
@@ -148,18 +146,16 @@
                             app:cardBackgroundColor="@color/base_dark_gray"
                             app:cardCornerRadius="20dp">
 
-                            <EditText
-                                android:id="@+id/et_time"
+                            <TextView
+                                android:id="@+id/tv_time"
+                                android:gravity="center"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
+                                android:layout_height="match_parent"
+                                android:textSize="20dp"
                                 android:background="@color/base_dark_gray"
-                                android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
                         </androidx.cardview.widget.CardView>
-                        <!--                                android:clickable="false"-->
-                        <!--                                android:focusable="false"-->
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_time"
                             style="@android:style/Widget.Button"
@@ -230,7 +226,7 @@
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="45dp"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="20dp"
                                 android:layout_marginRight="10dp"
@@ -238,15 +234,13 @@
                                 app:cardBackgroundColor="@color/base_dark_gray"
                                 app:cardCornerRadius="20dp">
 
-                                <EditText
-                                    android:id="@+id/et_date"
+                                <TextView
+                                    android:id="@+id/tv_date"
+                                    android:gravity="center"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
+                                    android:layout_height="match_parent"
+                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
-                                    android:clickable="false"
-                                    android:focusable="false"
-                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
@@ -522,7 +516,7 @@
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="45dp"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="20dp"
                                 android:layout_marginRight="10dp"
@@ -530,15 +524,13 @@
                                 app:cardBackgroundColor="@color/base_dark_gray"
                                 app:cardCornerRadius="20dp">
 
-                                <EditText
-                                    android:id="@+id/et_start_date"
+                                <TextView
+                                    android:id="@+id/tv_start_date"
+                                    android:gravity="center"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
+                                    android:layout_height="match_parent"
+                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
-                                    android:clickable="false"
-                                    android:focusable="false"
-                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
@@ -574,7 +566,7 @@
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="45dp"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="20dp"
                                 android:layout_marginRight="10dp"
@@ -582,15 +574,13 @@
                                 app:cardBackgroundColor="@color/base_dark_gray"
                                 app:cardCornerRadius="20dp">
 
-                                <EditText
-                                    android:id="@+id/et_end_date"
+                                <TextView
+                                    android:id="@+id/tv_end_date"
+                                    android:gravity="center"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
+                                    android:layout_height="match_parent"
+                                    android:textSize="20dp"
                                     android:background="@color/base_dark_gray"
-                                    android:clickable="false"
-                                    android:focusable="false"
-                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>

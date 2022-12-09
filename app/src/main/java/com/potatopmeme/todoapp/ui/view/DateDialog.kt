@@ -25,7 +25,7 @@ class DateDialog(private val context :AppCompatActivity) {
 
         binding.tvOk.setOnClickListener {
             listener.onOKClicked(
-                "${binding.datePicker.year} / ${binding.datePicker.month+1}  / ${binding.datePicker.dayOfMonth}"
+                "${binding.datePicker.year}/${binding.datePicker.month+1}/${binding.datePicker.dayOfMonth}"
                 ,binding.datePicker.year*10000+(binding.datePicker.month+1)*100+binding.datePicker.dayOfMonth
             )
             dlg.dismiss()

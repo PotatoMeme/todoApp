@@ -48,7 +48,7 @@ class AddActivity : AppCompatActivity() {
             Log.d(TAG, "setupDurationLayout: btnStartDate clicked")
             val dlg = DateDialog(this)
             dlg.setOnOKClickedListener { dateStr, date ->
-                binding.etStartDate.setText(date)
+                binding.tvStartDate.text = dateStr
                 startDate = date
             }
             dlg.show()
@@ -57,7 +57,7 @@ class AddActivity : AppCompatActivity() {
             Log.d(TAG, "setupDurationLayout: btnEndDate clicked")
             val dlg = DateDialog(this)
             dlg.setOnOKClickedListener { dateStr, date ->
-                binding.etEndDate.setText(date)
+                binding.tvEndDate.text = dateStr
                 endDate = date
             }
             dlg.show()
@@ -71,7 +71,7 @@ class AddActivity : AppCompatActivity() {
             Log.d(TAG, "setupDateLayout: btnDate clicked")
             val dlg = DateDialog(this)
             dlg.setOnOKClickedListener { dateStr, date ->
-                binding.etDate.setText(dateStr)
+                binding.tvDate.text = dateStr
                 this.date = date
             }
             dlg.show()
@@ -80,16 +80,9 @@ class AddActivity : AppCompatActivity() {
 
     private fun setupTimeLayout() {
         binding.scTime.setOnCheckedChangeListener { _, b ->
-            var layoutParams = binding.timeLayout.layoutParams
             when (b) {
-                true -> {
-                    layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
-                    binding.timeLayout.layoutParams = layoutParams
-                }
-                false -> {
-                    layoutParams.height = 0
-                    binding.timeLayout.layoutParams = layoutParams
-                }
+                true -> setTimeLayoutHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
+                false -> setTimeLayoutHeight(0)
             }
         }
 
@@ -97,13 +90,14 @@ class AddActivity : AppCompatActivity() {
             Log.d(TAG, "setupTimeLayout: btnTime clicked")
             val dlg = TimeDialog(this)
             dlg.setOnOKClickedListener { time ->
-                binding.etTime.setText(time)
+                binding.tvTime.text = time
             }
             dlg.show()
         }
     }
 
     private fun setFirstLayoutSet() {
+        setTimeLayoutHeight(0)
         setDateLayoutHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
         setWeekLayoutHeight(0)
         setDurationLayoutHeight(0)
@@ -246,6 +240,12 @@ class AddActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun setTimeLayoutHeight(height: Int) {
+        var layoutParams = binding.timeLayout.layoutParams
+        layoutParams.height = height
+        binding.timeLayout.layoutParams = layoutParams
     }
 
     private fun setDateLayoutHeight(height: Int) {

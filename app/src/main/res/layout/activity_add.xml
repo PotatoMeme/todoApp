@@ -152,12 +152,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
                                 android:background="@color/base_dark_gray"
-                                android:clickable="false"
-                                android:focusable="false"
+                                android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
                         </androidx.cardview.widget.CardView>
-
+                        <!--                                android:clickable="false"-->
+                        <!--                                android:focusable="false"-->
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_time"
                             style="@android:style/Widget.Button"
@@ -605,6 +605,42 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/dates_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:text="Dates"
+                            android:textColor="@color/white"
+                            android:textSize="25dp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_dates"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fb_dates_plus"
+                            app:tint="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/ic_add_24"
+                            app:backgroundTint="@color/base_dark_gray" />
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -643,6 +679,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -7,16 +7,24 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.potatopmeme.todoapp.R
+import com.potatopmeme.todoapp.data.model.Dates
 import com.potatopmeme.todoapp.databinding.ActivityAddBinding
+import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
 
 class AddActivity : AppCompatActivity() {
     private var _binding: ActivityAddBinding? = null
     private val binding get() = _binding!!
 
     private var arrWeek = arrayOf(false, false, false, false, false, false, false)
+
+    private lateinit var datesSelectAdapter: DatesSelectAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +45,41 @@ class AddActivity : AppCompatActivity() {
         setupDateLayout()
         setupWeekLayout()
         setupDurationLayout()
-
+        setupDatesLayout(this)
         setFirstLayoutSet()
+    }
+
+    var list = mutableListOf<Dates>()
+    var a = 0
+    private fun setupDatesLayout(appCompatActivity: AppCompatActivity ) {
+        datesSelectAdapter = DatesSelectAdapter()
+        binding.rvDates.apply {
+            setHasFixedSize(true)
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+            datesSelectAdapter.setOnItemClickListener( object : DatesSelectAdapter.OnItemClickListener{
+                override fun onItemClick(tv: TextView, date: Dates, pos: Int) {
+                    val dlg = DateDialog(appCompatActivity)
+                    dlg.setOnOKClickedListener { dateStr, date ->
+                        list[pos].date = dateStr
+                        tv.text = dateStr
+                        Log.d(TAG, "onItemClick: $list")
+                        datesSelectAdapter.submitList(list.toList())
+                    }
+                    dlg.show()
+                    Log.d(TAG, "onItemClick: $list")
+                }
+            })
+            adapter = datesSelectAdapter
+        }
+
+        binding.fbDatesPlus.setOnClickListener {
+            list.add(Dates("test${a++}"))
+            Log.d(TAG, "setupDatesLayout: $list")
+            datesSelectAdapter.submitList(list.toList())
+            Log.d(TAG, "${datesSelectAdapter.currentList}")
+        }
     }
 
     var startDate: Int? = null

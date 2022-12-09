@@ -8,18 +8,25 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
+import com.potatopmeme.todoapp.data.db.TodoDataBase
 import com.potatopmeme.todoapp.data.model.Dates
+import com.potatopmeme.todoapp.data.model.Todo
+import com.potatopmeme.todoapp.data.repository.TodoRepositoryImpl
 import com.potatopmeme.todoapp.databinding.ActivityAddBinding
 import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
+import com.potatopmeme.todoapp.ui.viewmodel.MainViewModel
+import com.potatopmeme.todoapp.ui.viewmodel.MainViewModelProviderFactory
 
 class AddActivity : AppCompatActivity() {
     private var _binding: ActivityAddBinding? = null
@@ -27,12 +34,21 @@ class AddActivity : AppCompatActivity() {
 
     private var arrWeek = arrayOf(false, false, false, false, false, false, false)
 
+    lateinit var viewModel: MainViewModel
+
     private lateinit var datesSelectAdapter: DatesSelectAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding =
             DataBindingUtil.setContentView(this, R.layout.activity_add)
+        
+        
+        val db = TodoDataBase.getInstance(this)
+        val recipeRepositoryImpl = TodoRepositoryImpl(db)
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl)
+        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+
 
         binding.btnBack.setOnClickListener {
             finish()
@@ -41,7 +57,98 @@ class AddActivity : AppCompatActivity() {
             finish()
         }
         binding.btnSave.setOnClickListener {
-            finish()
+            val pos = binding.spRepeat.selectedItemPosition
+            if (binding.etTitle.text.toString().isNullOrBlank()) {
+                Toast.makeText(this, "제목을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 0 && binding.tvDate.text.isNullOrEmpty()) {
+                Toast.makeText(this, "날짜를 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 1 && !arrWeek.any { it }) {
+                Toast.makeText(this, "주중 하나라도 선택해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 1 && binding.scDuration.isChecked && (binding.tvStartDate.text.toString()
+                    .isNullOrEmpty() || binding.tvEndDate.text.toString().isNullOrEmpty())
+            ) {
+                Toast.makeText(this, "기간의 날짜를 모두 선택해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 1 && binding.scDuration.isChecked && (startDate!! > endDate!!)) {
+                Toast.makeText(this, "기간의 시작날짜가 종료날짜보다 큽니다. 다시 선택해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 2 && list.size == 0) {
+                Toast.makeText(this, "날짜가 하나도 없습니다. 추가해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (pos == 2 && list.any { it.date.isNullOrEmpty() }) {
+                Toast.makeText(this, "날짜가 비어있는것이 있습니다. 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                when (pos) {
+                    0 -> {
+                        viewModel.saveTodo(
+                            Todo(
+                                title = binding.etTitle.text.toString(),
+                                time = binding.tvTime.text.toString(),
+                                repeatType = pos,
+                                date = binding.tvDate.text.toString(),
+                                memo = binding.etMemo.text.toString()
+                            )
+                        )
+                    }
+                    1 -> {
+                        viewModel.saveTodo(
+                            if(binding.scDuration.isSelected){
+                                Todo(
+                                    title = binding.etTitle.text.toString(),
+                                    time = binding.tvTime.text.toString(),
+                                    repeatType = pos,
+                                    sun = arrWeek[0],
+                                    mon = arrWeek[1],
+                                    tue = arrWeek[2],
+                                    wed = arrWeek[3],
+                                    thu = arrWeek[4],
+                                    fri = arrWeek[5],
+                                    sat = arrWeek[6],
+                                    duration = true,
+                                    memo = binding.etMemo.text.toString()
+                                )
+                            }else{
+                                Todo(
+                                    title = binding.etTitle.text.toString(),
+                                    time = binding.tvTime.text.toString(),
+                                    repeatType = pos,
+                                    sun = arrWeek[0],
+                                    mon = arrWeek[1],
+                                    tue = arrWeek[2],
+                                    wed = arrWeek[3],
+                                    thu = arrWeek[4],
+                                    fri = arrWeek[5],
+                                    sat = arrWeek[6],
+                                    duration = false,
+                                    startDate = binding.tvStartDate.text.toString(),
+                                    endDate = binding.tvEndDate.text.toString(),
+                                    memo = binding.etMemo.text.toString()
+                                )
+                            }
+                        )
+                    }
+                    2->{
+                        val dates = list.sortedBy {
+                            it.date
+                        }.let {
+                            var str = StringBuilder()
+                            it.forEach { date ->
+                                str.append(date).append(" ")
+                            }
+                            str.toString()
+                        }
+                        viewModel.saveTodo(
+                            Todo(
+                                title = binding.etTitle.text.toString(),
+                                time = binding.tvTime.text.toString(),
+                                repeatType = pos,
+                                dates = dates,
+                                memo = binding.etMemo.text.toString()
+                            )
+                        )
+                    }
+                }
+                finish()
+            }
+
+
         }
         setupTimeLayout()
         setupSpinner()
@@ -63,7 +170,7 @@ class AddActivity : AppCompatActivity() {
             datesSelectAdapter.setOnItemClickListener(object :
                 DatesSelectAdapter.OnItemClickListener {
                 override fun onItemClick(tv: TextView, date: Dates, pos: Int) {
-                    val dlg = DateDialog(appCompatActivity,date.date)
+                    val dlg = DateDialog(appCompatActivity, date.date)
                     dlg.setOnOKClickedListener { dateStr, date ->
                         list[pos].date = dateStr
                         tv.text = dateStr
@@ -102,7 +209,7 @@ class AddActivity : AppCompatActivity() {
         }
 
         binding.fbDatesPlus.setOnClickListener {
-            list.add(Dates(if (list.size > 0) list[list.size-1].date else ""))
+            list.add(Dates(if (list.size > 0) list[list.size - 1].date else ""))
             Log.d(TAG, "setupDatesLayout: $list")
             var layoutParams = binding.rvForm.layoutParams
             layoutParams.height += 230
@@ -115,6 +222,7 @@ class AddActivity : AppCompatActivity() {
     var endDate: Int? = null
     private fun setupDurationLayout() {
         binding.scDuration.setOnCheckedChangeListener { _, b ->
+            //Log.d(TAG, "setupDurationLayout: ${binding.scDuration.isChecked}")
             when (b) {
                 true -> setDurationFormHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
                 false -> setDurationFormHeight(0)
@@ -122,7 +230,7 @@ class AddActivity : AppCompatActivity() {
         }
         binding.btnStartDate.setOnClickListener {
             Log.d(TAG, "setupDurationLayout: btnStartDate clicked")
-            val dlg = DateDialog(this,binding.tvStartDate.text.toString())
+            val dlg = DateDialog(this, binding.tvStartDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvStartDate.text = dateStr
                 startDate = date
@@ -131,7 +239,7 @@ class AddActivity : AppCompatActivity() {
         }
         binding.btnEndDate.setOnClickListener {
             Log.d(TAG, "setupDurationLayout: btnEndDate clicked")
-            val dlg = DateDialog(this,binding.tvEndDate.text.toString())
+            val dlg = DateDialog(this, binding.tvEndDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvEndDate.text = dateStr
                 endDate = date
@@ -146,7 +254,7 @@ class AddActivity : AppCompatActivity() {
 
         binding.btnDate.setOnClickListener {
             Log.d(TAG, "setupDateLayout: btnDate clicked")
-            val dlg = DateDialog(this,binding.tvDate.text.toString())
+            val dlg = DateDialog(this, binding.tvDate.text.toString())
             dlg.setOnOKClickedListener { dateStr, date ->
                 binding.tvDate.text = dateStr
                 this.date = date
@@ -165,7 +273,7 @@ class AddActivity : AppCompatActivity() {
 
         binding.btnTime.setOnClickListener {
             Log.d(TAG, "setupTimeLayout: btnTime clicked")
-            val dlg = TimeDialog(this,binding.tvTime.text.toString())
+            val dlg = TimeDialog(this, binding.tvTime.text.toString())
             dlg.setOnOKClickedListener { time ->
                 binding.tvTime.text = time
             }

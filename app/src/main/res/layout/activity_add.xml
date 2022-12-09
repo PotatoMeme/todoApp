@@ -220,8 +220,10 @@
                             android:textStyle="bold" />
 
                         <RelativeLayout
+                            android:id="@+id/rv_form"
                             android:layout_width="match_parent"
-                            android:layout_height="300dp"
+                            android:layout_height="10dp"
+                            android:descendantFocusability="blocksDescendants"
                             android:layout_marginBottom="10dp">
 
                             <androidx.recyclerview.widget.RecyclerView

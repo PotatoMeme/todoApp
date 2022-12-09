@@ -75,10 +75,12 @@ class AddActivity : AppCompatActivity() {
         }
 
         binding.fbDatesPlus.setOnClickListener {
-            list.add(Dates("test${a++}"))
+            list.add(Dates(""))
             Log.d(TAG, "setupDatesLayout: $list")
+            var layoutParams = binding.rvForm.layoutParams
+            layoutParams.height += 230
+            binding.rvForm.layoutParams = layoutParams
             datesSelectAdapter.submitList(list.toList())
-            Log.d(TAG, "${datesSelectAdapter.currentList}")
         }
     }
 

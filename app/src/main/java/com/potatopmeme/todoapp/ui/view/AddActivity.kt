@@ -2,7 +2,6 @@ package com.potatopmeme.todoapp.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.Time
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -16,8 +15,8 @@ import com.potatopmeme.todoapp.databinding.ActivityAddBinding
 class AddActivity : AppCompatActivity() {
     private var _binding: ActivityAddBinding? = null
     private val binding get() = _binding!!
-    private var arrWeek = arrayOf(false, false, false, false, false, false, false)
 
+    private var arrWeek = arrayOf(false, false, false, false, false, false, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +26,56 @@ class AddActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
-
+        binding.btnCancel.setOnClickListener {
+            finish()
+        }
+        binding.btnSave.setOnClickListener {
+            finish()
+        }
         setupTimeLayout()
         setupSpinner()
-
-        setupWeek()
+        setupDateLayout()
+        setupWeekLayout()
+        setupDurationLayout()
 
         setFirstLayoutSet()
+    }
+
+    var startDate: Int? = null
+    var endDate: Int? = null
+    private fun setupDurationLayout() {
+        binding.btnStartDate.setOnClickListener {
+            Log.d(TAG, "setupDurationLayout: btnStartDate clicked")
+            val dlg = DateDialog(this)
+            dlg.setOnOKClickedListener { dateStr, date ->
+                binding.etStartDate.setText(date)
+                startDate = date
+            }
+            dlg.show()
+        }
+        binding.btnEndDate.setOnClickListener {
+            Log.d(TAG, "setupDurationLayout: btnEndDate clicked")
+            val dlg = DateDialog(this)
+            dlg.setOnOKClickedListener { dateStr, date ->
+                binding.etEndDate.setText(date)
+                endDate = date
+            }
+            dlg.show()
+        }
+
+    }
+
+    var date: Int? = null
+    private fun setupDateLayout() {
+        binding.btnDate.setOnClickListener {
+            Log.d(TAG, "setupDateLayout: btnDate clicked")
+            val dlg = DateDialog(this)
+            dlg.setOnOKClickedListener { dateStr, date ->
+                binding.etDate.setText(dateStr)
+                this.date = date
+            }
+            dlg.show()
+        }
     }
 
     private fun setupTimeLayout() {
@@ -68,7 +110,7 @@ class AddActivity : AppCompatActivity() {
         setDatesLayoutHeight(0)
     }
 
-    private fun setupWeek() {
+    private fun setupWeekLayout() {
         val colorDarkGray: Int = ContextCompat.getColor(this, R.color.base_dark_gray)
         val colorWhite: Int = ContextCompat.getColor(this, R.color.white)
         val colorBlack: Int = ContextCompat.getColor(this, R.color.black)

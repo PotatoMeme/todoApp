@@ -27,7 +27,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginRight="40dp"
-                android:text="Set Time"
+                android:text="Set Date"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
 
@@ -38,17 +38,16 @@
                 android:layout_marginRight="40dp"
                 android:background="@color/base_back" />
 
-            <TimePicker
-                android:id="@+id/time_picker"
+            <DatePicker
+                android:id="@+id/date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:datePickerMode="spinner"
                 android:layout_marginLeft="60dp"
                 android:layout_marginRight="60dp"
-                android:timePickerMode="spinner"
-                android:theme="@style/CustomTimePicker"
-                />
-
+                android:calendarViewShown="false"
+                android:theme="@style/CustomTimePicker" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

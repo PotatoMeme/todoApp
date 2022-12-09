@@ -100,6 +100,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@color/base_dark_gray"
+                            android:clickable="false"
+                            android:focusable="false"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>
@@ -244,6 +246,7 @@
                                     android:background="@color/base_dark_gray"
                                     android:clickable="false"
                                     android:focusable="false"
+                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
@@ -535,6 +538,7 @@
                                     android:background="@color/base_dark_gray"
                                     android:clickable="false"
                                     android:focusable="false"
+                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
@@ -586,6 +590,7 @@
                                     android:background="@color/base_dark_gray"
                                     android:clickable="false"
                                     android:focusable="false"
+                                    android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </androidx.cardview.widget.CardView>
@@ -626,11 +631,10 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_dates"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/fb_dates_plus"
-                            app:tint="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -638,7 +642,8 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="20dp"
                             android:src="@drawable/ic_add_24"
-                            app:backgroundTint="@color/base_dark_gray" />
+                            app:backgroundTint="@color/base_dark_gray"
+                            app:tint="@color/white" />
                     </LinearLayout>
 
                     <TextView

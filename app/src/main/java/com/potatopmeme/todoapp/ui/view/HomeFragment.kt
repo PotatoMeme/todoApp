@@ -47,27 +47,18 @@ class HomeFragment : Fragment() {
 
     private lateinit var todoHomeListAdapter: TodoHomeListAdapter
 
+    var task = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
+
+        setupRecyclerView()
 
         val cal = Calendar.getInstance()
         cal.time = mDate
         dayNum = cal.get(Calendar.DAY_OF_WEEK)
         binding.tvDate.text = mFormat.format(mDate)
-
-
-        viewModel.todoLiveData.observe(viewLifecycleOwner){
-            //todoHomeListAdapter.checkedList = viewModel.checkedLiveData.value!!
-            todoHomeListAdapter.submitList(it)
-
-        }
-        viewModel.checkedLiveData.observe(viewLifecycleOwner){
-            val todoList = viewModel.todoLiveData.value
-            todoHomeListAdapter.checkedList = it
-            todoHomeListAdapter.submitList(todoList)
-        }
-
         viewModel.getTodoWithDate(
             dateStr = binding.tvDate.text.toString(),
             dateInt = binding.tvDate.text.toString().split("/").let {
@@ -76,6 +67,16 @@ class HomeFragment : Fragment() {
             },
             weekType = dayNum
         )
+
+
+        viewModel.checkedLiveData.observe(viewLifecycleOwner){
+            Log.d(TAG, "$it")
+            val todoList = viewModel.todoLiveData.value
+            todoHomeListAdapter.checkedList = it
+            task = todoList!!.size - it.size
+            binding.tvAlive.text = "$task tasks alive"
+            todoHomeListAdapter.submitList(todoList)
+        }
 
         binding.btnDate.setOnClickListener {
             val dlg = DateDialog(activity as MainActivity , binding.tvDate.text.toString())
@@ -94,7 +95,7 @@ class HomeFragment : Fragment() {
             dlg.show()
         }
 
-        setupRecyclerView()
+
     }
 
     private fun setupRecyclerView() {
@@ -119,14 +120,6 @@ class HomeFragment : Fragment() {
                     }else{
                         viewModel.deleteCheckedWith(todo.num, binding.tvDate.text.toString())
                     }
-                    viewModel.getTodoWithDate(
-                        dateStr = binding.tvDate.text.toString(),
-                        dateInt = binding.tvDate.text.toString().split("/").let {
-                            var date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
-                            date
-                        },
-                        weekType = dayNum
-                    )
                 }
             })
             adapter = todoHomeListAdapter

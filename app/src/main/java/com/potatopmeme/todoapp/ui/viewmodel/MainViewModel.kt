@@ -67,6 +67,7 @@ class MainViewModel(
 
     fun saveChecked(checked: Checked)= viewModelScope.launch(Dispatchers.IO) {
         checkedRepository.insertChecked(checked)
+        getCheckedWithData(checked.date)
     }
 
     fun deleteChecked(checked: Checked)= viewModelScope.launch(Dispatchers.IO) {
@@ -74,6 +75,7 @@ class MainViewModel(
     }
     fun deleteCheckedWith(num: Int,dateStr: String)= viewModelScope.launch(Dispatchers.IO) {
         checkedRepository.deleteCheckedWithNumAndDate(num,dateStr)
+        getCheckedWithData(dateStr)
     }
 
     companion object {

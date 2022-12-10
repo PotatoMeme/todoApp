@@ -11,19 +11,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
+import com.potatopmeme.todoapp.data.db.CheckedDataBase
 import com.potatopmeme.todoapp.data.db.TodoDataBase
 import com.potatopmeme.todoapp.data.model.Dates
 import com.potatopmeme.todoapp.data.model.Todo
+import com.potatopmeme.todoapp.data.repository.CheckedRepositoryImpl
 import com.potatopmeme.todoapp.data.repository.TodoRepositoryImpl
 import com.potatopmeme.todoapp.databinding.ActivityAddBinding
 import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
@@ -47,9 +46,12 @@ class EditActivity : AppCompatActivity() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_add)
 
 
-        val db = TodoDataBase.getInstance(this)
-        val recipeRepositoryImpl = TodoRepositoryImpl(db)
-        val factory = MainViewModelProviderFactory(recipeRepositoryImpl)
+        val todo_db = TodoDataBase.getInstance(this)
+        val recipeRepositoryImpl = TodoRepositoryImpl(todo_db)
+        val checked_db = CheckedDataBase.getInstance(this)
+        val checkedRepositoryImpl = CheckedRepositoryImpl(checked_db)
+
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl,checkedRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         num = intent.getIntExtra("num", 0)
@@ -171,7 +173,7 @@ class EditActivity : AppCompatActivity() {
         setupDatesLayout(this)
 
         viewModel.getTodoWithName(num)
-        viewModel.liveData.observe(this) {
+        viewModel.todoLiveData.observe(this) {
             if (it.isEmpty()) return@observe
             val todo = it[0]
             binding.etTitle.setText(todo.title)
@@ -216,14 +218,12 @@ class EditActivity : AppCompatActivity() {
                         binding.scDuration.isChecked = true
                         binding.tvStartDate.text = todo.startDate
                         startDate = todo.startDate.split("/").let {
-                            var date = 0
-                            date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            var date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
                             date
                         }
                         binding.tvEndDate.text = todo.endDate
                         endDate = todo.endDate.split("/").let {
-                            var date = 0
-                            date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            var date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
                             date
                         }
                     }

@@ -33,12 +33,12 @@ class TodoRepositoryImpl(
 
     override fun getTodoWithDate(dateStr: String, dateInt: Int, weekType: Int): List<Todo> {
         return when (weekType) {
-            0 -> db.todoDao().getTodoWithDataSun("%$dateStr%", dateInt)
-            1 -> db.todoDao().getTodoWithDataMon("%$dateStr%", dateInt)
-            2 -> db.todoDao().getTodoWithDataTue("%$dateStr%", dateInt)
-            3 -> db.todoDao().getTodoWithDataWed("%$dateStr%", dateInt)
-            4 -> db.todoDao().getTodoWithDataThu("%$dateStr%", dateInt)
-            5 -> db.todoDao().getTodoWithDataFri("%$dateStr%", dateInt)
+            1-> db.todoDao().getTodoWithDataSun("%$dateStr%", dateInt)
+            2 -> db.todoDao().getTodoWithDataMon("%$dateStr%", dateInt)
+            3 -> db.todoDao().getTodoWithDataTue("%$dateStr%", dateInt)
+            4 -> db.todoDao().getTodoWithDataWed("%$dateStr%", dateInt)
+            5 -> db.todoDao().getTodoWithDataThu("%$dateStr%", dateInt)
+            6 -> db.todoDao().getTodoWithDataFri("%$dateStr%", dateInt)
             else -> db.todoDao().getTodoWithDataSat("%$dateStr%", dateInt)
         }
     }

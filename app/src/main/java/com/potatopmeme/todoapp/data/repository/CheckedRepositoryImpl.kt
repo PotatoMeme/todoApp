@@ -15,6 +15,10 @@ class CheckedRepositoryImpl(
         db.checkedDao().deleteChecked(checked)
     }
 
+    override suspend fun deleteCheckedWithNum(num: Int) {
+        db.checkedDao().deleteCheckedWithNum(num)
+    }
+
     override suspend fun deleteCheckedWithNumAndDate(num: Int, date: String) {
         db.checkedDao().deleteCheckedWithNumAndDate(num, date)
     }

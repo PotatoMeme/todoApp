@@ -17,6 +17,9 @@ interface CheckedDao {
     @Delete
     suspend fun deleteChecked(checked: Checked)
 
+    @Query("DELETE FROM checked WHERE todo_num = :num")
+    suspend fun deleteCheckedWithNum(num: Int)
+
     @Query("DELETE FROM checked WHERE todo_num = :num AND date = :date")
     suspend fun deleteCheckedWithNumAndDate(num: Int, date: String)
 

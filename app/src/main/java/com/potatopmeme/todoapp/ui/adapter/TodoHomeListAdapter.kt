@@ -5,26 +5,31 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.potatopmeme.todoapp.data.model.Checked
 import com.potatopmeme.todoapp.data.model.Todo
+import com.potatopmeme.todoapp.databinding.ItemHomeTodoBinding
+import com.potatopmeme.todoapp.databinding.ItemHomeTodoTimeBinding
 import com.potatopmeme.todoapp.databinding.ItemTodoBinding
 import com.potatopmeme.todoapp.databinding.ItemTodoTimeBinding
 
-class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallback) {
+class TodoHomeListAdapter( var checkedList : List<Checked>) : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallback) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            0 -> TodoViewHolder(
-                ItemTodoBinding.inflate(
+            0 -> TodoHomeViewHolder(
+                ItemHomeTodoBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
             )
-            else -> TodoTimeViewHolder(
-                ItemTodoTimeBinding.inflate(
+            else -> TodoHomeTimeViewHolder(
+                ItemHomeTodoTimeBinding.inflate(
                     LayoutInflater.from(
                         parent.context
                     ), parent, false
@@ -40,23 +45,31 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val detail = getItem(position)
         when (getItem(position).time.isNullOrBlank()) {
-            true -> (holder as TodoViewHolder).bind(detail!!)
-            false -> (holder as TodoTimeViewHolder).bind(detail!!)
+            true -> (holder as TodoHomeViewHolder).bind(detail!!)
+            false -> (holder as TodoHomeTimeViewHolder).bind(detail!!)
         }
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(v: View, todo: Todo, pos: Int)
+    interface OnItemClickListener1 {
+        fun onItemClick(v: View, todo: Todo , pos: Int)
     }
 
-    private var listener: OnItemClickListener? = null
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
+    interface OnItemClickListener2 {
+        fun onItemClick(v: View, todo: Todo , checked : ImageView , pos: Int)
     }
 
-    inner class TodoViewHolder(
-        private val binding: ItemTodoBinding
+    private var listener1: OnItemClickListener1? = null
+    private var listener2: OnItemClickListener2? = null
+
+    fun setOnItemClickListener1(listener: OnItemClickListener1) {
+        this.listener1 = listener
+    }
+    fun setOnItemClickListener2(listener: OnItemClickListener2) {
+        this.listener2 = listener
+    }
+
+    inner class TodoHomeViewHolder(
+        private val binding: ItemHomeTodoBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(todo: Todo) {
             with(binding) {
@@ -70,27 +83,31 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
                         }
                     )
                 )
-                tvSecond.text = when (todo.repeatType) {
-                    0 -> "${todo.date}"
-                    1 -> "${if (todo.mon) "월," else ""}${if (todo.tue) "화," else ""}${if (todo.wed) "수," else ""}${if (todo.thu) "목," else ""}${if (todo.fri) "금," else ""}${if (todo.sat) "토," else ""}${if (todo.sun) "일," else ""}"
-                        .dropLast(1)
-                    else -> "${todo.dates.split(" ")[0]} +"
-                }
             }
+
+            if(checkedList.any { it.todo_num == todo.num }){
+                binding.btnCheck.isActivated = true
+            }
+
             val pos = absoluteAdapterPosition
             itemView.setOnClickListener {
                 Log.d(TAG, "bind: $pos")
             }
             if (pos != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
-                    listener?.onItemClick(it, todo, pos)
+                    listener1?.onItemClick(it, todo, pos)
+                }
+            }
+            if (pos != RecyclerView.NO_POSITION) {
+                binding.btnCheck.setOnClickListener {
+                    listener2?.onItemClick(it, todo,binding.btnCheck, pos)
                 }
             }
         }
     }
 
-    inner class TodoTimeViewHolder(
-        private val binding: ItemTodoTimeBinding
+    inner class TodoHomeTimeViewHolder(
+        private val binding: ItemHomeTodoTimeBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(todo: Todo) {
             with(binding) {
@@ -104,26 +121,31 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
                         }
                     )
                 )
-                tvSecond.text = when (todo.repeatType) {
-                    0 -> "${todo.date}"
-                    1 -> "${if (todo.sun) "일" else ""}${if (todo.mon) "월" else ""}${if (todo.tue) "화" else ""}${if (todo.wed) "수" else ""}${if (todo.thu) "목" else ""}${if (todo.fri) "금" else ""}${if (todo.sat) "토" else ""}"
-                    else -> "${todo.dates.split(" ")[0]} +"
-                }
             }
+
+            if(checkedList.any { it.todo_num == todo.num }){
+                binding.btnCheck.isActivated = true
+            }
+
             val pos = absoluteAdapterPosition
             itemView.setOnClickListener {
                 Log.d(TAG, "bind: $pos")
             }
             if (pos != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
-                    listener?.onItemClick(it, todo, pos)
+                    listener1?.onItemClick(it, todo, pos)
+                }
+            }
+            if (pos != RecyclerView.NO_POSITION) {
+                binding.btnCheck.setOnClickListener {
+                    listener2?.onItemClick(it, todo,binding.btnCheck, pos)
                 }
             }
         }
     }
 
     companion object {
-        private const val TAG = "DatesSelectAdapter"
+        private const val TAG = "TodoHomeListAdapter"
         private val TodoDiffCallback = object : DiffUtil.ItemCallback<Todo>() {
             override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
                 return oldItem == newItem

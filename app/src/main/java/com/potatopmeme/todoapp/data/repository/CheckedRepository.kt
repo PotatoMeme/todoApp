@@ -11,6 +11,8 @@ interface CheckedRepository {
 
     suspend fun deleteChecked(checked: Checked)
 
+    suspend fun deleteCheckedWithNum(num: Int)
+
     suspend fun deleteCheckedWithNumAndDate(num: Int, date: String)
 
     fun getCheckedAll(): Flow<List<Checked>>

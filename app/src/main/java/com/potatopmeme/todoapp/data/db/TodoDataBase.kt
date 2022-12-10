@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.potatopmeme.todoapp.data.model.Checked
 import com.potatopmeme.todoapp.data.model.Todo
 
-@Database(entities = [Todo::class,Checked::class], version = 1, exportSchema = false)
+@Database(entities = [Todo::class], version = 1, exportSchema = false)
 abstract class TodoDataBase : RoomDatabase(){
     abstract fun todoDao() : TodoDao
 

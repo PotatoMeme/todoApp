@@ -8,7 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.potatopmeme.todoapp.R
+import com.potatopmeme.todoapp.data.db.CheckedDataBase
 import com.potatopmeme.todoapp.data.db.TodoDataBase
+import com.potatopmeme.todoapp.data.model.Checked
+import com.potatopmeme.todoapp.data.repository.CheckedRepositoryImpl
 import com.potatopmeme.todoapp.data.repository.TodoRepositoryImpl
 import com.potatopmeme.todoapp.databinding.ActivityMainBinding
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModel
@@ -27,9 +30,12 @@ class MainActivity : AppCompatActivity() {
         _binding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val db = TodoDataBase.getInstance(this)
-        val recipeRepositoryImpl = TodoRepositoryImpl(db)
-        val factory = MainViewModelProviderFactory(recipeRepositoryImpl)
+        val todo_db = TodoDataBase.getInstance(this)
+        val recipeRepositoryImpl = TodoRepositoryImpl(todo_db)
+        val checked_db = CheckedDataBase.getInstance(this)
+        val checkedRepositoryImpl = CheckedRepositoryImpl(checked_db)
+
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl,checkedRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
 

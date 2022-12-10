@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
+import com.potatopmeme.todoapp.data.db.CheckedDataBase
 import com.potatopmeme.todoapp.data.db.TodoDataBase
 import com.potatopmeme.todoapp.data.model.Dates
 import com.potatopmeme.todoapp.data.model.Todo
+import com.potatopmeme.todoapp.data.repository.CheckedRepositoryImpl
 import com.potatopmeme.todoapp.data.repository.TodoRepositoryImpl
 import com.potatopmeme.todoapp.databinding.ActivityAddBinding
 import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
@@ -42,11 +44,14 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding =
             DataBindingUtil.setContentView(this, R.layout.activity_add)
-        
-        
-        val db = TodoDataBase.getInstance(this)
-        val recipeRepositoryImpl = TodoRepositoryImpl(db)
-        val factory = MainViewModelProviderFactory(recipeRepositoryImpl)
+
+
+        val todo_db = TodoDataBase.getInstance(this)
+        val recipeRepositoryImpl = TodoRepositoryImpl(todo_db)
+        val checked_db = CheckedDataBase.getInstance(this)
+        val checkedRepositoryImpl = CheckedRepositoryImpl(checked_db)
+
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl,checkedRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
 

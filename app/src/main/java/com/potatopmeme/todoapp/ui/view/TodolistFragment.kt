@@ -8,15 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
 import com.potatopmeme.todoapp.data.model.Todo
-import com.potatopmeme.todoapp.databinding.FragmentSettingsBinding
 import com.potatopmeme.todoapp.databinding.FragmentTodolistBinding
 import com.potatopmeme.todoapp.ui.adapter.TodoListAdapter
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModel
@@ -53,7 +50,7 @@ class TodolistFragment : Fragment() {
             binding.rvForm.layoutParams = layoutParams
         }
         
-        viewModel.liveData.observe(viewLifecycleOwner){
+        viewModel.todoLiveData.observe(viewLifecycleOwner){
             Log.d(TAG, "onViewCreated: $it")
         }
 

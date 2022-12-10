@@ -44,6 +44,12 @@ class MainViewModel(
         )
     }
 
+    fun getTodoWithDate(dateStr: String,dateInt: Int,weekType :Int) = viewModelScope.launch(Dispatchers.IO) {
+        _liveData.postValue(
+            todoRepository.getTodoWithDate(dateStr, dateInt, weekType)
+        )
+    }
+
     companion object {
         private const val TAG = "MainViewModel"
     }

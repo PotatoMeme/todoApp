@@ -17,4 +17,6 @@ interface TodoRepository {
     fun getTodoAll(): Flow<List<Todo>>
 
     fun getTodoWithNum(num: Int): List<Todo>
+
+    fun getTodoWithDate(dateStr: String,dateInt: Int,weekType:Int): List<Todo>
 }

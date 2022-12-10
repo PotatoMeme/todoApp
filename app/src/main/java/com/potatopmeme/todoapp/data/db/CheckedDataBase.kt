@@ -8,21 +8,21 @@ import com.potatopmeme.todoapp.data.model.Checked
 import com.potatopmeme.todoapp.data.model.Todo
 
 @Database(entities = [Todo::class,Checked::class], version = 1, exportSchema = false)
-abstract class TodoDataBase : RoomDatabase(){
-    abstract fun todoDao() : TodoDao
+abstract class CheckedDataBase : RoomDatabase(){
+    abstract fun checkedDao() : CheckedDao
 
     companion object{
         @Volatile
-        private var INSTANCE: TodoDataBase? = null
+        private var INSTANCE: CheckedDataBase? = null
 
-        private fun buildDatabase(context: Context): TodoDataBase =
+        private fun buildDatabase(context: Context): CheckedDataBase =
             Room.databaseBuilder(
                 context.applicationContext,
-                TodoDataBase::class.java,
-                "my-todos"
+                CheckedDataBase::class.java,
+                "my-checkes"
             ).build()
 
-        fun getInstance(context: Context): TodoDataBase =
+        fun getInstance(context: Context): CheckedDataBase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }

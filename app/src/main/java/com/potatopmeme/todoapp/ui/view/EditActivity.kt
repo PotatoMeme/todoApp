@@ -111,7 +111,9 @@ class EditActivity : AppCompatActivity() {
                                     sat = arrWeek[6],
                                     duration = true,
                                     startDate = binding.tvStartDate.text.toString(),
+                                    startDateInt = startDate!!,
                                     endDate = binding.tvEndDate.text.toString(),
+                                    endDateInt = endDate!!,
                                     memo = binding.etMemo.text.toString()
                                 )
 
@@ -183,7 +185,7 @@ class EditActivity : AppCompatActivity() {
             binding.spRepeat.setSelection(todo.repeatType)
             when (todo.repeatType) {
                 0 -> {
-                    binding.tvTime.text = todo.date
+                    binding.tvDate.text = todo.date
                 }
                 1 -> {
                     arrWeek = arrayOf(

@@ -27,5 +27,48 @@ interface TodoDao {
 
 
     @Query("SELECT * FROM todo WHERE num = :num")
-    fun getTodoWithNum(num : Int): List<Todo>
+    fun getTodoWithNum(num: Int): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND sun AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataSun(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND mon AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataMon(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND tue AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataTue(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND wed AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataWed(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND thu AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataThu(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND fri AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataFri(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
+    @Query("SELECT * FROM todo WHERE date LIKE :dateStr OR (repeatType = 1  AND sat AND ( (NOT duration) OR (:dateInt BETWEEN startDateInt AND endDateInt))) OR (repeatType =2  And dates Like :dateStr)")
+    fun getTodoWithDataSat(
+        dateStr: String,
+        dateInt: Int,
+    ): List<Todo>
+
 }

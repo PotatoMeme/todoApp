@@ -27,7 +27,9 @@ data class Todo(
 
     val duration: Boolean = false,
     val startDate : String= "",
+    val startDateInt : Int= 0,
     val endDate : String = "",
+    val endDateInt : Int= 0,
 
     //2 -> Dates
     val dates : String = "",

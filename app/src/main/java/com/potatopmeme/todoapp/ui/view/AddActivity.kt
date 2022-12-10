@@ -103,7 +103,9 @@ class AddActivity : AppCompatActivity() {
                                     sat = arrWeek[6],
                                     duration = true,
                                     startDate = binding.tvStartDate.text.toString(),
+                                    startDateInt = startDate!!,
                                     endDate = binding.tvEndDate.text.toString(),
+                                    endDateInt = endDate!!,
                                     memo = binding.etMemo.text.toString()
                                 )
 

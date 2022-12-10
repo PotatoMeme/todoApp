@@ -1,5 +1,6 @@
 package com.potatopmeme.todoapp.ui.view
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -28,7 +30,7 @@ import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModel
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModelProviderFactory
 
-class AddActivity : AppCompatActivity() {
+class EditActivity : AppCompatActivity() {
     private var _binding: ActivityAddBinding? = null
     private val binding get() = _binding!!
 
@@ -38,18 +40,22 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var datesSelectAdapter: DatesSelectAdapter
 
+    private var num: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_add)
-        
-        
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_add)
+
+
         val db = TodoDataBase.getInstance(this)
         val recipeRepositoryImpl = TodoRepositoryImpl(db)
         val factory = MainViewModelProviderFactory(recipeRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
+        num = intent.getIntExtra("num", 0)
 
+        binding.btnSave.text = "Update"
+        
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -77,8 +83,9 @@ class AddActivity : AppCompatActivity() {
             } else {
                 when (pos) {
                     0 -> {
-                        viewModel.saveTodo(
+                        viewModel.updateTodo(
                             Todo(
+                                num = num,
                                 title = binding.etTitle.text.toString(),
                                 time = binding.tvTime.text.toString(),
                                 repeatType = pos,
@@ -88,9 +95,10 @@ class AddActivity : AppCompatActivity() {
                         )
                     }
                     1 -> {
-                        viewModel.saveTodo(
+                        viewModel.updateTodo(
                             if(binding.scDuration.isChecked){
                                 Todo(
+                                    num = num,
                                     title = binding.etTitle.text.toString(),
                                     time = binding.tvTime.text.toString(),
                                     repeatType = pos,
@@ -109,6 +117,7 @@ class AddActivity : AppCompatActivity() {
 
                             }else{
                                 Todo(
+                                    num = num,
                                     title = binding.etTitle.text.toString(),
                                     time = binding.tvTime.text.toString(),
                                     repeatType = pos,
@@ -124,7 +133,7 @@ class AddActivity : AppCompatActivity() {
                             }
                         )
                     }
-                    2->{
+                    2 -> {
                         val dates = list.distinct().sortedBy {
                             it.date
                         }.let {
@@ -134,8 +143,9 @@ class AddActivity : AppCompatActivity() {
                             }
                             str.toString().dropLast(1)
                         }
-                        viewModel.saveTodo(
+                        viewModel.updateTodo(
                             Todo(
+                                num = num,
                                 title = binding.etTitle.text.toString(),
                                 time = binding.tvTime.text.toString(),
                                 repeatType = pos,
@@ -150,13 +160,110 @@ class AddActivity : AppCompatActivity() {
 
 
         }
+
         setupTimeLayout()
         setupSpinner()
         setupDateLayout()
         setupWeekLayout()
         setupDurationLayout()
         setupDatesLayout(this)
-        setFirstLayoutSet()
+
+        viewModel.getTodoWithName(num)
+        viewModel.liveData.observe(this) {
+            if (it.isEmpty()) return@observe
+            val todo = it[0]
+            binding.etTitle.setText(todo.title)
+            if (todo.time.isNotEmpty()) {
+                binding.scTime.isChecked = true
+                binding.timeLayout.setHeightWrap()
+                binding.tvTime.text = todo.time
+            } else {
+                binding.timeLayout.setHeight(0)
+            }
+            binding.spRepeat.setSelection(todo.repeatType)
+            when (todo.repeatType) {
+                0 -> {
+                    binding.tvTime.text = todo.date
+                }
+                1 -> {
+                    arrWeek = arrayOf(
+                        todo.sun, todo.mon, todo.tue, todo.wed, todo.thu, todo.fri, todo.sat
+                    )
+                    if (arrWeek[0]){
+                        setPositiveWeek(binding.btnSun,binding.tvSun)
+                    }
+                    if (arrWeek[1]){
+                        setPositiveWeek(binding.btnMon,binding.tvMon)
+                    }
+                    if (arrWeek[2]){
+                        setPositiveWeek(binding.btnTue,binding.tvTue)
+                    }
+                    if (arrWeek[3]){
+                        setPositiveWeek(binding.btnWed,binding.tvWed)
+                    }
+                    if (arrWeek[4]){
+                        setPositiveWeek(binding.btnThu,binding.tvThu)
+                    }
+                    if (arrWeek[5]){
+                        setPositiveWeek(binding.btnFri,binding.tvFri)
+                    }
+                    if (arrWeek[6]){
+                        setPositiveWeek(binding.btnSat,binding.tvSat)
+                    }
+                    if (todo.duration){
+                        binding.scDuration.isChecked = true
+                        binding.tvStartDate.text = todo.startDate
+                        startDate = todo.startDate.split("/").let {
+                            var date = 0
+                            date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            date
+                        }
+                        binding.tvEndDate.text = todo.endDate
+                        endDate = todo.endDate.split("/").let {
+                            var date = 0
+                            date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            date
+                        }
+                    }
+                }
+                2 -> {
+                    todo.dates.split(" ").forEach { date ->
+                        list.add(Dates(date))
+                    }
+                    var layoutParams = binding.rvForm.layoutParams
+                    layoutParams.height += (230*list.size)
+                    binding.rvForm.layoutParams = layoutParams
+                    datesSelectAdapter.submitList(list.toList())
+                }
+            }
+            binding.etMemo.setText(todo.memo)
+        }
+
+
+    }
+
+
+
+    fun LinearLayout.setHeight(num: Int) {
+        var layoutParam = this.layoutParams
+        layoutParam.height = num
+        this.layoutParams = layoutParam
+    }
+
+    fun LinearLayout.setHeightWrap() {
+        var layoutParam = this.layoutParams
+        layoutParam.height = LinearLayout.LayoutParams.WRAP_CONTENT
+        this.layoutParams = layoutParam
+    }
+
+    fun setPositiveWeek(card: CardView, tv: TextView) {
+        card.setCardBackgroundColor(colorDarkGray)
+        tv.setTextColor(colorWhite)
+    }
+
+    fun setNegativeWeek(card: CardView, tv: TextView) {
+        card.setCardBackgroundColor(colorWhite)
+        tv.setTextColor(colorBlack)
     }
 
     var list = mutableListOf<Dates>()
@@ -164,8 +271,7 @@ class AddActivity : AppCompatActivity() {
         datesSelectAdapter = DatesSelectAdapter()
         binding.rvDates.apply {
             setHasFixedSize(true)
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
             datesSelectAdapter.setOnItemClickListener(object :
                 DatesSelectAdapter.OnItemClickListener {
@@ -222,7 +328,7 @@ class AddActivity : AppCompatActivity() {
     var endDate: Int? = null
     private fun setupDurationLayout() {
         binding.scDuration.setOnCheckedChangeListener { _, b ->
-            Log.d(TAG, "setupDurationLayout: ${binding.scDuration.isChecked}")
+            //Log.d(TAG, "setupDurationLayout: ${binding.scDuration.isChecked}")
             when (b) {
                 true -> setDurationFormHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
                 false -> setDurationFormHeight(0)
@@ -249,15 +355,12 @@ class AddActivity : AppCompatActivity() {
 
     }
 
-    var date: Int? = null
     private fun setupDateLayout() {
-
         binding.btnDate.setOnClickListener {
             Log.d(TAG, "setupDateLayout: btnDate clicked")
             val dlg = DateDialog(this, binding.tvDate.text.toString())
-            dlg.setOnOKClickedListener { dateStr, date ->
+            dlg.setOnOKClickedListener { dateStr, _ ->
                 binding.tvDate.text = dateStr
-                this.date = date
             }
             dlg.show()
         }
@@ -279,14 +382,6 @@ class AddActivity : AppCompatActivity() {
             }
             dlg.show()
         }
-    }
-
-    private fun setFirstLayoutSet() {
-        setTimeLayoutHeight(0)
-        setDateLayoutHeight(LinearLayout.LayoutParams.WRAP_CONTENT)
-        setWeekLayoutHeight(0)
-        setDurationLayoutHeight(0)
-        setDatesLayoutHeight(0)
     }
 
     private fun setupWeekLayout() {
@@ -381,15 +476,11 @@ class AddActivity : AppCompatActivity() {
 
     private fun setupSpinner() {
         val sort_list = listOf("None", "Day of the week", "Dates")
-        val adapter_spinner =
-            ArrayAdapter(this, R.layout.itme_dropdown, sort_list)
+        val adapter_spinner = ArrayAdapter(this, R.layout.itme_dropdown, sort_list)
         binding.spRepeat.setAdapter(adapter_spinner)
         binding.spRepeat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 Log.d(TAG, "onItemSelected: $position")
                 when (position) {
@@ -459,6 +550,10 @@ class AddActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "AddActivity"
+        private const val TAG = "EditActivity"
+
+        private val colorDarkGray: Int = Color.parseColor("#444444")
+        private val colorWhite: Int = Color.parseColor("#FFFFFFFF")
+        private val colorBlack: Int = Color.parseColor("#FF000000")
     }
 }

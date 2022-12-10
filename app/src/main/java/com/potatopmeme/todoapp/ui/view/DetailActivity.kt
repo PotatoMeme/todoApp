@@ -1,5 +1,6 @@
 package com.potatopmeme.todoapp.ui.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
@@ -39,6 +40,11 @@ class DetailActivity : AppCompatActivity() {
                 }
             }.show()
         }
+        binding.fbEdit.setOnClickListener {
+            val intent = Intent(this,EditActivity::class.java)
+            intent.putExtra("num",num)
+            startActivity(intent)
+        }
 
         val db = TodoDataBase.getInstance(this)
         val recipeRepositoryImpl = TodoRepositoryImpl(db)
@@ -76,7 +82,7 @@ class DetailActivity : AppCompatActivity() {
                     binding.weekForm.setHeightWrap()
 
                     binding.tvWeek.text =
-                        "${if (todo.sun) "일요일," else ""}${if (todo.mon) "월요일," else ""}${if (todo.tue) "화요일," else ""}${if (todo.wed) "수요일," else ""}${if (todo.thu) "목요일," else ""}${if (todo.fri) "금요일," else ""}${if (todo.sat) "토요일," else ""}"
+                        "${if (todo.sun) "일," else ""}${if (todo.mon) "월," else ""}${if (todo.tue) "화," else ""}${if (todo.wed) "수," else ""}${if (todo.thu) "목," else ""}${if (todo.fri) "금," else ""}${if (todo.sat) "토," else ""}"
                             .dropLast(1)
 
                     if (todo.duration) {

@@ -15,15 +15,19 @@ class TodoRepositoryImpl(
         db.todoDao().updateTodo(todo)
     }
 
-    override suspend fun deleteBook(todo: Todo) {
+    override suspend fun deleteTodo(todo: Todo) {
         db.todoDao().deleteTodo(todo)
+    }
+
+    override suspend fun deleteTodoWithNum(num: Int) {
+        db.todoDao().deleteTodoWithNum(num)
     }
 
     override fun getTodoAll(): Flow<List<Todo>> {
         return db.todoDao().getTodoAll()
     }
 
-    override fun getTodoWithNum(num: Int): Todo {
+    override fun getTodoWithNum(num: Int): List<Todo> {
         return db.todoDao().getTodoWithNum(num)
     }
 }

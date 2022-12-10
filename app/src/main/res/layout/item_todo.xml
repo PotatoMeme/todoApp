@@ -51,8 +51,7 @@
                     android:lines="1"
                     android:text="@{todoItem.title}"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
             </androidx.cardview.widget.CardView>
 
@@ -76,8 +75,7 @@
                     android:background="@color/base_dark_gray"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
             </androidx.cardview.widget.CardView>
 

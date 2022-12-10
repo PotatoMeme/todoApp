@@ -52,6 +52,10 @@ class TodolistFragment : Fragment() {
             layoutParams.height = 280*it.size
             binding.rvForm.layoutParams = layoutParams
         }
+        
+        viewModel.liveData.observe(viewLifecycleOwner){
+            Log.d(TAG, "onViewCreated: $it")
+        }
 
         setupRecyclerView()
         setupTouchHelper(view)
@@ -94,6 +98,9 @@ class TodolistFragment : Fragment() {
             todoListAdapter.setOnItemClickListener( object :TodoListAdapter.OnItemClickListener{
                 override fun onItemClick(v: View, todo: Todo, pos: Int) {
                     Log.d(TAG, "onItemClick: $todo")
+                    var intent = Intent(context,DetailActivity::class.java)
+                    intent.putExtra("num",todo.num)
+                    startActivity(intent)
                 }
             })
             adapter = todoListAdapter

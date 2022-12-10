@@ -19,10 +19,13 @@ interface TodoDao {
     @Delete
     suspend fun deleteTodo(todo: Todo)
 
+    @Query("DELETE FROM todo WHERE num = :num")
+    suspend fun deleteTodoWithNum(num: Int)
+
     @Query("SELECT * FROM todo")
     fun getTodoAll(): Flow<List<Todo>>
 
 
     @Query("SELECT * FROM todo WHERE num = :num")
-    fun getTodoWithNum(num : Int): Todo
+    fun getTodoWithNum(num : Int): List<Todo>
 }

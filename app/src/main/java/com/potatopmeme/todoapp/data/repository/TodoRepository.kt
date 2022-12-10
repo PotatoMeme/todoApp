@@ -10,9 +10,11 @@ interface TodoRepository {
 
     suspend fun updateTodo(todo: Todo)
 
-    suspend fun deleteBook(todo: Todo)
+    suspend fun deleteTodo(todo: Todo)
+
+    suspend fun deleteTodoWithNum(num: Int)
 
     fun getTodoAll(): Flow<List<Todo>>
 
-    fun getTodoWithNum(num: Int): Todo
+    fun getTodoWithNum(num: Int): List<Todo>
 }

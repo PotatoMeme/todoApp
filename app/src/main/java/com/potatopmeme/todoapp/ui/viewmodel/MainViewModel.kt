@@ -1,5 +1,7 @@
 package com.potatopmeme.todoapp.ui.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.potatopmeme.todoapp.data.model.Todo
@@ -24,13 +26,23 @@ class MainViewModel(
     }
 
     fun deleteTodo(todo: Todo) = viewModelScope.launch(Dispatchers.IO) {
-        todoRepository.deleteBook(todo)
+        todoRepository.deleteTodo(todo)
+    }
+
+    fun deleteTodoWithNum(num: Int) = viewModelScope.launch(Dispatchers.IO) {
+        todoRepository.deleteTodoWithNum(num)
     }
 
     val savedTodo: StateFlow<List<Todo>> = todoRepository.getTodoAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf())
 
-    fun getTodoWithName(num:Int) = todoRepository.getTodoWithNum(num)
+    private val _liveData = MutableLiveData<List<Todo>>()
+    val liveData: LiveData<List<Todo>> get() = _liveData
+    fun getTodoWithName(num: Int) = viewModelScope.launch(Dispatchers.IO) {
+        _liveData.postValue(
+            todoRepository.getTodoWithNum(num)
+        )
+    }
 
     companion object {
         private const val TAG = "MainViewModel"

@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/base_back"
-        tools:context=".ui.view.AddActivity">
+        android:background="@color/base_back">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -243,6 +242,8 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="20dp"
                             android:src="@drawable/ic_add_24"
+
+                            app:maxImageSize="30dp"
                             app:backgroundTint="@color/base_dark_gray"
                             app:tint="@color/white" />
                     </LinearLayout>

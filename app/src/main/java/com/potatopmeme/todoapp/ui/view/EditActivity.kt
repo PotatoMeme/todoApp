@@ -1,10 +1,12 @@
 package com.potatopmeme.todoapp.ui.view
 
+import android.animation.LayoutTransition
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -55,6 +57,16 @@ class EditActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         num = intent.getIntExtra("num", 0)
+
+        (binding.timeLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.repeatLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.dateLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.weekLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.durationLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.datesLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.rvForm as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.memoLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        (binding.csLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
         binding.btnSave.text = "Update"
         

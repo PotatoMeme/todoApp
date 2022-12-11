@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -53,7 +54,7 @@ class EditActivity : AppCompatActivity() {
         val checked_db = CheckedDataBase.getInstance(this)
         val checkedRepositoryImpl = CheckedRepositoryImpl(checked_db)
 
-        val factory = MainViewModelProviderFactory(recipeRepositoryImpl,checkedRepositoryImpl)
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl, checkedRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         num = intent.getIntExtra("num", 0)
@@ -69,7 +70,7 @@ class EditActivity : AppCompatActivity() {
         (binding.csLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
         binding.btnSave.text = "Update"
-        
+
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -110,7 +111,7 @@ class EditActivity : AppCompatActivity() {
                     }
                     1 -> {
                         viewModel.updateTodo(
-                            if(binding.scDuration.isChecked){
+                            if (binding.scDuration.isChecked) {
                                 Todo(
                                     num = num,
                                     title = binding.etTitle.text.toString(),
@@ -131,7 +132,7 @@ class EditActivity : AppCompatActivity() {
                                     memo = binding.etMemo.text.toString()
                                 )
 
-                            }else{
+                            } else {
                                 Todo(
                                     num = num,
                                     title = binding.etTitle.text.toString(),
@@ -185,6 +186,7 @@ class EditActivity : AppCompatActivity() {
         setupDatesLayout(this)
 
         viewModel.getTodoWithName(num)
+
         viewModel.todoLiveData.observe(this) {
             if (it.isEmpty()) return@observe
             val todo = it[0]
@@ -205,37 +207,37 @@ class EditActivity : AppCompatActivity() {
                     arrWeek = arrayOf(
                         todo.sun, todo.mon, todo.tue, todo.wed, todo.thu, todo.fri, todo.sat
                     )
-                    if (arrWeek[0]){
-                        setPositiveWeek(binding.btnSun,binding.tvSun)
+                    if (arrWeek[0]) {
+                        setPositiveWeek(binding.btnSun, binding.tvSun)
                     }
-                    if (arrWeek[1]){
-                        setPositiveWeek(binding.btnMon,binding.tvMon)
+                    if (arrWeek[1]) {
+                        setPositiveWeek(binding.btnMon, binding.tvMon)
                     }
-                    if (arrWeek[2]){
-                        setPositiveWeek(binding.btnTue,binding.tvTue)
+                    if (arrWeek[2]) {
+                        setPositiveWeek(binding.btnTue, binding.tvTue)
                     }
-                    if (arrWeek[3]){
-                        setPositiveWeek(binding.btnWed,binding.tvWed)
+                    if (arrWeek[3]) {
+                        setPositiveWeek(binding.btnWed, binding.tvWed)
                     }
-                    if (arrWeek[4]){
-                        setPositiveWeek(binding.btnThu,binding.tvThu)
+                    if (arrWeek[4]) {
+                        setPositiveWeek(binding.btnThu, binding.tvThu)
                     }
-                    if (arrWeek[5]){
-                        setPositiveWeek(binding.btnFri,binding.tvFri)
+                    if (arrWeek[5]) {
+                        setPositiveWeek(binding.btnFri, binding.tvFri)
                     }
-                    if (arrWeek[6]){
-                        setPositiveWeek(binding.btnSat,binding.tvSat)
+                    if (arrWeek[6]) {
+                        setPositiveWeek(binding.btnSat, binding.tvSat)
                     }
-                    if (todo.duration){
+                    if (todo.duration) {
                         binding.scDuration.isChecked = true
                         binding.tvStartDate.text = todo.startDate
                         startDate = todo.startDate.split("/").let {
-                            var date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            var date = it[0].toInt() * 10000 + it[1].toInt() * 100 + it[2].toInt()
                             date
                         }
                         binding.tvEndDate.text = todo.endDate
                         endDate = todo.endDate.split("/").let {
-                            var date = it[0].toInt()*10000 + it[1].toInt()*100 + it[2].toInt()
+                            var date = it[0].toInt() * 10000 + it[1].toInt() * 100 + it[2].toInt()
                             date
                         }
                     }
@@ -244,8 +246,13 @@ class EditActivity : AppCompatActivity() {
                     todo.dates.split(" ").forEach { date ->
                         list.add(Dates(date))
                     }
+                    val width_dateSelect = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        65f,
+                        resources.displayMetrics
+                    ).toInt()
                     var layoutParams = binding.rvForm.layoutParams
-                    layoutParams.height += (230*list.size)
+                    layoutParams.height += (width_dateSelect * list.size)
                     binding.rvForm.layoutParams = layoutParams
                     datesSelectAdapter.submitList(list.toList())
                 }
@@ -255,7 +262,6 @@ class EditActivity : AppCompatActivity() {
 
 
     }
-
 
 
     fun LinearLayout.setHeight(num: Int) {
@@ -304,6 +310,12 @@ class EditActivity : AppCompatActivity() {
             adapter = datesSelectAdapter
         }
 
+        val width_dateSelect = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            65f,
+            resources.displayMetrics
+        ).toInt()
+
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT
         ) {
@@ -319,7 +331,7 @@ class EditActivity : AppCompatActivity() {
                 val position = viewHolder.bindingAdapterPosition
                 list.removeAt(position)
                 var layoutParams = binding.rvForm.layoutParams
-                layoutParams.height -= 230
+                layoutParams.height -= width_dateSelect
                 binding.rvForm.layoutParams = layoutParams
                 datesSelectAdapter.submitList(list)
             }
@@ -332,7 +344,7 @@ class EditActivity : AppCompatActivity() {
             list.add(Dates(if (list.size > 0) list[list.size - 1].date else ""))
             Log.d(TAG, "setupDatesLayout: $list")
             var layoutParams = binding.rvForm.layoutParams
-            layoutParams.height += 230
+            layoutParams.height += width_dateSelect
             binding.rvForm.layoutParams = layoutParams
             datesSelectAdapter.submitList(list.toList())
         }

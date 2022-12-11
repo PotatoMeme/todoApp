@@ -1,25 +1,19 @@
 package com.potatopmeme.todoapp.ui.view
 
 import android.animation.LayoutTransition
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.potatopmeme.todoapp.R
 import com.potatopmeme.todoapp.data.db.CheckedDataBase
 import com.potatopmeme.todoapp.data.db.TodoDataBase
@@ -31,6 +25,7 @@ import com.potatopmeme.todoapp.databinding.ActivityAddBinding
 import com.potatopmeme.todoapp.ui.adapter.DatesSelectAdapter
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModel
 import com.potatopmeme.todoapp.ui.viewmodel.MainViewModelProviderFactory
+
 
 class AddActivity : AppCompatActivity() {
     private var _binding: ActivityAddBinding? = null
@@ -53,7 +48,7 @@ class AddActivity : AppCompatActivity() {
         val checked_db = CheckedDataBase.getInstance(this)
         val checkedRepositoryImpl = CheckedRepositoryImpl(checked_db)
 
-        val factory = MainViewModelProviderFactory(recipeRepositoryImpl,checkedRepositoryImpl)
+        val factory = MainViewModelProviderFactory(recipeRepositoryImpl, checkedRepositoryImpl)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         (binding.timeLayout as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -105,7 +100,7 @@ class AddActivity : AppCompatActivity() {
                     }
                     1 -> {
                         viewModel.saveTodo(
-                            if(binding.scDuration.isChecked){
+                            if (binding.scDuration.isChecked) {
                                 Todo(
                                     title = binding.etTitle.text.toString(),
                                     time = binding.tvTime.text.toString(),
@@ -125,7 +120,7 @@ class AddActivity : AppCompatActivity() {
                                     memo = binding.etMemo.text.toString()
                                 )
 
-                            }else{
+                            } else {
                                 Todo(
                                     title = binding.etTitle.text.toString(),
                                     time = binding.tvTime.text.toString(),
@@ -142,7 +137,7 @@ class AddActivity : AppCompatActivity() {
                             }
                         )
                     }
-                    2->{
+                    2 -> {
                         val dates = list.distinct().sortedBy {
                             it.date
                         }.let {
@@ -178,6 +173,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     var list = mutableListOf<Dates>()
+
     private fun setupDatesLayout(appCompatActivity: AppCompatActivity) {
         datesSelectAdapter = DatesSelectAdapter()
         binding.rvDates.apply {
@@ -202,6 +198,12 @@ class AddActivity : AppCompatActivity() {
             adapter = datesSelectAdapter
         }
 
+        val width_dateSelect = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            65f,
+            resources.displayMetrics
+        ).toInt()
+
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT
         ) {
@@ -217,7 +219,8 @@ class AddActivity : AppCompatActivity() {
                 val position = viewHolder.bindingAdapterPosition
                 list.removeAt(position)
                 var layoutParams = binding.rvForm.layoutParams
-                layoutParams.height -= 230
+
+                layoutParams.height -= width_dateSelect
                 binding.rvForm.layoutParams = layoutParams
                 datesSelectAdapter.submitList(list)
             }
@@ -230,11 +233,12 @@ class AddActivity : AppCompatActivity() {
             list.add(Dates(if (list.size > 0) list[list.size - 1].date else ""))
             Log.d(TAG, "setupDatesLayout: $list")
             var layoutParams = binding.rvForm.layoutParams
-            layoutParams.height += 230
+            layoutParams.height += width_dateSelect
             binding.rvForm.layoutParams = layoutParams
             datesSelectAdapter.submitList(list.toList())
         }
     }
+
 
     var startDate: Int? = null
     var endDate: Int? = null

@@ -232,7 +232,7 @@
                         <RelativeLayout
                             android:id="@+id/rv_form"
                             android:layout_width="match_parent"
-                            android:layout_height="10dp"
+                            android:layout_height="20dp"
                             android:layout_marginBottom="10dp"
                             android:animateLayoutChanges="true">
 
@@ -240,6 +240,7 @@
                                 android:id="@+id/rv_dates"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:nestedScrollingEnabled="false"
                                 android:overScrollMode="never"
                                 android:scrollbars="vertical" />
 

@@ -3,6 +3,7 @@ package com.potatopmeme.todoapp.ui.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,21 +37,33 @@ class TodolistFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
-        binding.btnAdd.setOnClickListener{
-            startActivity(Intent(activity as MainActivity,AddActivity::class.java))
+        binding.btnAdd.setOnClickListener {
+            startActivity(Intent(activity as MainActivity, AddActivity::class.java))
         }
 
-        collectLatestStateFlow(viewModel.savedTodo){
+        val width = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            80f,
+            resources.displayMetrics
+        ).toInt()
+        val width_default = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            30f,
+            resources.displayMetrics
+        ).toInt()
+
+        collectLatestStateFlow(viewModel.savedTodo) {
             todoListAdapter.submitList(it)
             var layoutParams = binding.rvForm.layoutParams
-            layoutParams.height = 280*it.size
+            layoutParams.height = width_default + width * it.size
             binding.rvForm.layoutParams = layoutParams
         }
-        
-        viewModel.todoLiveData.observe(viewLifecycleOwner){
+
+        viewModel.todoLiveData.observe(viewLifecycleOwner) {
             Log.d(TAG, "onViewCreated: $it")
         }
 
@@ -92,11 +105,11 @@ class TodolistFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            todoListAdapter.setOnItemClickListener( object :TodoListAdapter.OnItemClickListener{
+            todoListAdapter.setOnItemClickListener(object : TodoListAdapter.OnItemClickListener {
                 override fun onItemClick(v: View, todo: Todo, pos: Int) {
                     Log.d(TAG, "onItemClick: $todo")
-                    var intent = Intent(context,DetailActivity::class.java)
-                    intent.putExtra("num",todo.num)
+                    var intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("num", todo.num)
                     startActivity(intent)
                 }
             })
@@ -109,7 +122,7 @@ class TodolistFragment : Fragment() {
         super.onDestroyView()
     }
 
-    companion object{
+    companion object {
         private const val TAG = "TodolistFragment"
     }
 }

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/base_back">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,16 +26,18 @@
                 android:textColor="@color/white"
                 android:textSize="25dp"
                 android:textStyle="bold" />
+
             <RelativeLayout
                 android:id="@+id/rv_form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_todo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
                     android:scrollbars="vertical" />
 
@@ -47,8 +50,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:src="@drawable/ic_add_24"
-                app:tint="@android:color/white"
-                app:backgroundTint="@color/base_dark_gray" />
+                app:backgroundTint="@color/base_dark_gray"
+                app:tint="@android:color/white" />
 
         </LinearLayout>
 

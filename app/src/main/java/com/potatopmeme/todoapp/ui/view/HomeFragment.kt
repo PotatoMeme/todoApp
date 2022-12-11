@@ -4,6 +4,7 @@ package com.potatopmeme.todoapp.ui.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,6 +84,16 @@ class HomeFragment : Fragment() {
         )
         //binding.rvDates.scrollToPosition(dateInt % 100 - 1)
 
+        val width = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            80f, this.getResources().getDisplayMetrics()
+        ).toInt()
+
+        val width_default = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            30f, this.getResources().getDisplayMetrics()
+        ).toInt()
+
         viewModel.checkedLiveData.observe(viewLifecycleOwner) {
             Log.d(TAG, "$it")
             val todoList = viewModel.todoLiveData.value
@@ -90,14 +101,16 @@ class HomeFragment : Fragment() {
             task = todoList!!.size - it.size
             binding.tvAlive.text = "$task tasks alive"
             var layoutParams = binding.checkedForm.layoutParams
-            layoutParams.height = 280*todoList!!.size
+            layoutParams.height = width_default + width * todoList!!.size
             binding.checkedForm.layoutParams = layoutParams
             todoHomeListAdapter.submitList(todoList)
-            binding.rvDates.scrollToPosition(binding.tvDate.text.toString().split("/")[2].toInt()-1)
+            binding.rvDates.scrollToPosition(
+                binding.tvDate.text.toString().split("/")[2].toInt() - 1
+            )
         }
 
         binding.btnAdd.setOnClickListener {
-            startActivity(Intent(activity as MainActivity,AddActivity::class.java))
+            startActivity(Intent(activity as MainActivity, AddActivity::class.java))
         }
 
         binding.btnDate.setOnClickListener {
@@ -151,7 +164,7 @@ class HomeFragment : Fragment() {
 
                     val maxDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
                     var list = mutableListOf<Dates>()
-                    var weekType = dayNum + (7 * 5) - (pos+1) % 100
+                    var weekType = dayNum + (7 * 5) - (pos + 1) % 100
                     for (i in 1..maxDate) {
                         list.add(Dates("$i", weekType++, false))
                     }
@@ -160,7 +173,7 @@ class HomeFragment : Fragment() {
 
                     viewModel.getTodoWithDate(
                         dateStr = binding.tvDate.text.toString(),
-                        dateInt = split[0].toInt() * 10000 +split[1].toInt() * 100 + pos+1,
+                        dateInt = split[0].toInt() * 10000 + split[1].toInt() * 100 + pos + 1,
                         weekType = dayNum
                     )
                     //binding.rvDates.scrollToPosition((pos+1) % 100 - 1)

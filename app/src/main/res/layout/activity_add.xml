@@ -132,7 +132,7 @@
                     <LinearLayout
                         android:id="@+id/time_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:animateLayoutChanges="true"
                         android:orientation="horizontal">
 
@@ -213,7 +213,7 @@
                     <LinearLayout
                         android:id="@+id/dates_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:animateLayoutChanges="true"
                         android:orientation="vertical">
 
@@ -324,7 +324,7 @@
                     <LinearLayout
                         android:id="@+id/week_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:animateLayoutChanges="true"
                         android:orientation="vertical">
 
@@ -546,7 +546,7 @@
                     <LinearLayout
                         android:id="@+id/duration_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:animateLayoutChanges="true"
                         android:orientation="vertical">
 

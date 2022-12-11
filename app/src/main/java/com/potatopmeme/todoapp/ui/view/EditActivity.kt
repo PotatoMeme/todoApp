@@ -329,11 +329,12 @@ class EditActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
-                list.removeAt(position)
+
+                datesSelectAdapter.notifyItemRemoved(position)
+                list = datesSelectAdapter.currentList.toMutableList()
                 var layoutParams = binding.rvForm.layoutParams
                 layoutParams.height -= width_dateSelect
                 binding.rvForm.layoutParams = layoutParams
-                datesSelectAdapter.submitList(list)
             }
         }
         ItemTouchHelper(itemTouchHelperCallback).apply {

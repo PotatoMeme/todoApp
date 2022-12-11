@@ -89,8 +89,15 @@ class HomeFragment : Fragment() {
             todoHomeListAdapter.checkedList = it
             task = todoList!!.size - it.size
             binding.tvAlive.text = "$task tasks alive"
+            var layoutParams = binding.checkedForm.layoutParams
+            layoutParams.height = 280*todoList!!.size
+            binding.checkedForm.layoutParams = layoutParams
             todoHomeListAdapter.submitList(todoList)
             binding.rvDates.scrollToPosition(binding.tvDate.text.toString().split("/")[2].toInt()-1)
+        }
+
+        binding.btnAdd.setOnClickListener {
+            startActivity(Intent(activity as MainActivity,AddActivity::class.java))
         }
 
         binding.btnDate.setOnClickListener {
